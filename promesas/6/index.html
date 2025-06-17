@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enviar Formulario Simulado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-sm text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟 Enviar Formulario Simulado</h1>
+
+    <input
+      id="nombre"
+      type="text"
+      placeholder="Nombre"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Correo electrónico"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <textarea
+      id="mensaje"
+      placeholder="Mensaje"
+      rows="4"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+    ></textarea>
+
+    <button
+      id="btnEnviar"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-4 transition duration-200"
+    >
+      Enviar
+    </button>
+
+    <div
+      id="resultado"
+      class="text-lg font-medium mt-2 hidden text-blue-100"
+    ></div>
+  </div>
+
+  <script>
+    function enviarFormulario(nombre, email, mensaje) {
+      return new Promise((resolve, reject) => {
+        if (!nombre || !email || !mensaje) {
+          reject("❌ Todos los campos son obligatorios");
+          return;
+        }
+
+        setTimeout(() => {
+          resolve("✅ Formulario enviado correctamente");
+        }, 1500);
+      });
+    }
+
+    const btn = document.getElementById("btnEnviar");
+    const resultado = document.getElementById("resultado");
+
+    btn.addEventListener("click", () => {
+      const nombre = document.getElementById("nombre").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const mensaje = document.getElementById("mensaje").value.trim();
+
+      resultado.textContent = "🌠 Enviando...";
+      resultado.classList.remove("text-green-400", "text-red-400", "hidden");
+
+      enviarFormulario(nombre, email, mensaje)
+        .then(res => {
+          resultado.textContent = res;
+          resultado.classList.add("text-green-400");
+        })
+        .catch(err => {
+          resultado.textContent = err;
+          resultado.classList.add("text-red-400");
+        });
+    });
+  </script>
+</body>
+</html>

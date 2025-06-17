@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cargar JSON Local</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black flex items-center justify-center min-h-screen p-6">
+
+  <div class="bg-blue-950 p-8 rounded-2xl shadow-2xl w-full max-w-md text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold text-blue-300 mb-6">📄 Cargar JSON Local</h1>
+
+    <button
+      id="btnCargar"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded transition duration-200"
+    >
+      Cargar Archivo JSON
+    </button>
+
+    <div id="resultado" class="mt-6 text-blue-100 text-lg whitespace-pre-wrap text-left"></div>
+  </div>
+
+  <script>
+    document.getElementById("btnCargar").addEventListener("click", async () => {
+      const resultado = document.getElementById("resultado");
+      resultado.textContent = "⏳ Cargando archivo JSON...";
+
+      try {
+        const response = await fetch("datos.json");
+        if (!response.ok) throw new Error("No se pudo cargar el archivo.");
+        const data = await response.json();
+        resultado.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultado.textContent = "❌ Error al cargar JSON: " + error.message;
+      }
+    });
+  </script>
+</body>
+</html>

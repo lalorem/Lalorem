@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verificar Sesión</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-md text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟🔐 Verificar Sesión</h1>
+
+    <input
+      id="token"
+      type="text"
+      placeholder="Introduce tu token"
+      class="w-full mb-4 px-4 py-2 border border-blue-300 rounded bg-blue-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+
+    <button
+      id="btnVerificar"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Verificar
+    </button>
+
+    <div
+      id="mensaje"
+      class="text-lg font-medium mt-4 text-blue-100 hidden"
+    ></div>
+  </div>
+
+  <script>
+    document.getElementById("btnVerificar").addEventListener("click", () => {
+      const token = document.getElementById("token").value.trim();
+      const mensaje = document.getElementById("mensaje");
+
+      mensaje.classList.remove("hidden");
+
+      if (!token) {
+        mensaje.textContent = "❌ Debes introducir un token.";
+        return;
+      }
+
+      mensaje.textContent = "⏳ Verificando...";
+
+      setTimeout(() => {
+        if (token === "123456") {
+          mensaje.textContent = "✅ Sesión verificada correctamente.";
+        } else {
+          mensaje.textContent = "❌ Token inválido.";
+        }
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

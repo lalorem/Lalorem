@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cargar Múltiples Imágenes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen p-6 flex flex-col items-center justify-start">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-2xl text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟🖼️ Cargar Múltiples Imágenes</h1>
+
+    <button
+      id="btnCargar"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Cargar Imágenes
+    </button>
+
+    <div
+      id="estado"
+      class="mb-4 text-blue-100 text-lg"
+    ></div>
+
+    <div
+      id="contenedorImagenes"
+      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+    ></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("btnCargar");
+    const estado = document.getElementById("estado");
+    const contenedor = document.getElementById("contenedorImagenes");
+
+    const imagenesSimuladas = [
+      "https://i.pinimg.com/736x/ef/51/39/ef5139941db36ba416a49c4303347562.jpg",
+      "https://i.pinimg.com/736x/65/f4/5a/65f45aadf0c78657af4d1ebdf7ee67f0.jpg",
+      "https://i.pinimg.com/736x/34/1a/9a/341a9aac690b31f2294577b2d9dc3c6f.jpg",
+      "https://i.pinimg.com/736x/94/fb/a7/94fba79e0a3f2d2b2f9b2991c583f874.jpg",
+      "https://i.pinimg.com/736x/e1/2f/3e/e12f3e709aa0e5f128ec5a10425d5e60.jpg",
+      "https://i.pinimg.com/736x/1b/8b/70/1b8b70c006897956dcf7ae063e41b44a.jpg"
+    ];
+
+    btn.addEventListener("click", () => {
+      estado.textContent = "⏳ Cargando imágenes...";
+      contenedor.innerHTML = "";
+
+      const promesas = imagenesSimuladas.map((url, i) =>
+        new Promise(resolve => {
+          setTimeout(() => resolve(url), 500 + i * 300);
+        })
+      );
+
+      Promise.all(promesas).then(imagenes => {
+        estado.textContent = "✅ Imágenes cargadas correctamente.";
+        imagenes.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.alt = "Imagen cargada";
+          img.className = "rounded-lg shadow-md border border-blue-400";
+          contenedor.appendChild(img);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

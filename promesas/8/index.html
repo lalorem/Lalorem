@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadena de Promesas: Login y Perfil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-sm text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟 Login y Obtener Perfil</h1>
+
+    <input
+      id="usuario"
+      type="text"
+      placeholder="Usuario"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <input
+      id="clave"
+      type="password"
+      placeholder="Clave"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <button
+      id="btnLogin"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Iniciar Sesión
+    </button>
+
+    <div
+      id="mensaje"
+      class="text-lg font-medium mt-4 text-blue-100 hidden"
+    ></div>
+  </div>
+
+  <script>
+    function login(usuario, clave) {
+      return new Promise((resolve, reject) => {
+        if (usuario === "adminn" && clave === "12345") {
+          setTimeout(() => resolve("✔️ Login exitoso"), 1000);
+        } else {
+          reject("❌ Credenciales incorrectas");
+        }
+      });
+    }
+
+    function obtenerPerfil() {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve("👤 Perfil: Admin - Acceso completo"), 1000);
+      });
+    }
+
+    const btn = document.getElementById("btnLogin");
+    const mensaje = document.getElementById("mensaje");
+
+    btn.addEventListener("click", () => {
+      const usuario = document.getElementById("usuario").value.trim();
+      const clave = document.getElementById("clave").value.trim();
+
+      mensaje.textContent = "🔐 Iniciando sesión...";
+      mensaje.classList.remove("hidden", "text-green-400", "text-red-400");
+
+      login(usuario, clave)
+        .then(res => {
+          mensaje.textContent = res;
+          mensaje.classList.add("text-green-400");
+          return obtenerPerfil();
+        })
+        .then(perfil => {
+          mensaje.textContent += "\n" + perfil;
+        })
+        .catch(err => {
+          mensaje.textContent = err;
+          mensaje.classList.add("text-red-400");
+        });
+    });
+  </script>
+</body>
+</html>

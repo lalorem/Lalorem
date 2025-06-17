@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Obtener Localización del Usuario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-md text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟 Obtener Localización del Usuario</h1>
+
+    <button
+      id="btnUbicacion"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Obtener Ubicación
+    </button>
+
+    <div
+      id="resultado"
+      class="text-lg font-medium mt-4 text-blue-100"
+    ></div>
+  </div>
+
+  <script>
+    const boton = document.getElementById("btnUbicacion");
+    const resultado = document.getElementById("resultado");
+
+    boton.addEventListener("click", () => {
+      resultado.textContent = "📡 Obteniendo ubicación...";
+      resultado.classList.remove("text-red-400", "text-green-400");
+
+      if (!navigator.geolocation) {
+        resultado.textContent = "❌ La geolocalización no es compatible con este navegador.";
+        resultado.classList.add("text-red-400");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          resultado.innerHTML = `✅ Tu ubicación:<br><strong>Latitud:</strong> ${lat}<br><strong>Longitud:</strong> ${lon}`;
+          resultado.classList.add("text-green-400");
+        },
+        (error) => {
+          resultado.textContent = "❌ No se pudo obtener la ubicación.";
+          resultado.classList.add("text-red-400");
+        }
+      );
+    });
+  </script>
+</body>
+</html>

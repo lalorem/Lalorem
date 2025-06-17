@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leer Múltiples Archivos con Promise.all</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-md text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟 Leer Múltiples Archivos</h1>
+
+    <button
+      id="btnLeer"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Leer Archivos
+    </button>
+
+    <div
+      id="resultado"
+      class="text-left font-mono whitespace-pre-wrap text-blue-100 text-sm bg-blue-900 p-4 rounded border border-blue-400"
+    ></div>
+  </div>
+
+  <script>
+    function leerArchivo(nombre, contenido) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(`📄 ${nombre}:\n${contenido}`);
+        }, 1000);
+      });
+    }
+
+    document.getElementById("btnLeer").addEventListener("click", () => {
+      const resultado = document.getElementById("resultado");
+      resultado.textContent = "⏳ Leyendo archivos...";
+
+      const archivos = [
+        leerArchivo("archivo1.txt", "Contenido del archivo 1"),
+        leerArchivo("archivo2.txt", "Contenido del archivo 2"),
+        leerArchivo("archivo3.txt", "Contenido del archivo 3"),
+      ];
+
+      Promise.all(archivos)
+        .then((contenidos) => {
+          resultado.textContent = contenidos.join("\n\n");
+        })
+        .catch(() => {
+          resultado.textContent = "❌ Error al leer los archivos";
+        });
+    });
+  </script>
+</body>
+</html>

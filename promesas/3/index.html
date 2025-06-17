@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Llamar a API con Fetch</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-blue-950 shadow-2xl rounded-2xl p-8 w-full max-w-lg text-center text-white border border-blue-400">
+    <h1 class="text-3xl font-bold mb-6 text-blue-300">🌟 Llamar a API con Fetch</h1>
+
+    <input
+      id="urlInput"
+      type="text"
+      placeholder="Ingresa la URL de la API"
+      value="https://jsonplaceholder.typicode.com/posts/1"
+      class="w-full mb-4 px-4 py-2 border border-blue-400 rounded bg-blue-800 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <button
+      id="btnFetch"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded mb-6 transition duration-200"
+    >
+      Obtener Datos
+    </button>
+
+    <pre
+      id="resultado"
+      class="text-left text-sm text-blue-100 border border-blue-400 bg-blue-800 p-4 rounded max-h-64 overflow-auto whitespace-pre-wrap hidden"
+    ></pre>
+  </div>
+
+  <script>
+    const btn = document.getElementById("btnFetch");
+    const input = document.getElementById("urlInput");
+    const resultado = document.getElementById("resultado");
+
+    btn.addEventListener("click", () => {
+      const url = input.value.trim();
+      if (!url) {
+        resultado.textContent = "❌ Ingresa una URL válida";
+        resultado.classList.remove("hidden");
+        return;
+      }
+
+      resultado.textContent = "🌠 Consultando API...";
+      resultado.classList.remove("hidden");
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error("❌ Error en la respuesta");
+          return res.json();
+        })
+        .then(data => {
+          resultado.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+          resultado.textContent = err.message;
+        });
+    });
+  </script>
+</body>
+</html>
