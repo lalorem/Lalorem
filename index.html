@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Datos (Excel)</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #001829;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen flex items-center justify-center">
+
+  <!-- Fondo SVG -->
+  <div class="absolute inset-0 z-0">
+    <svg id="visual" viewBox="0 0 675 900" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect x="0" y="0" width="675" height="900" fill="#001829"></rect>
+      <g fill="none" stroke="#297EA6" stroke-width="9">
+        <path d="M0 -109.5L24.6 -33.8L104.1 -33.8L39.8 12.9L64.4 88.6L0 41.8L-64.4 88.6L-39.8 12.9L-104.1 -33.8L-24.6 -33.8Z" transform="translate(174 154)"></path>
+        <path d="M0 -41.5L9.3 -12.8L39.5 -12.8L15.1 4.9L24.4 33.6L0 15.9L-24.4 33.6L-15.1 4.9L-39.5 -12.8L-9.3 -12.8Z" transform="translate(350 652)"></path>
+        <path d="M0 -65.1L14.6 -20.1L61.9 -20.1L23.7 7.7L38.3 52.7L0 24.9L-38.3 52.7L-23.7 7.7L-61.9 -20.1L-14.6 -20.1Z" transform="translate(569 330)"></path>
+        <path d="M0 -94.4L21.2 -29.2L89.8 -29.2L34.3 11.1L55.5 76.4L0 36.1L-55.5 76.4L-34.3 11.1L-89.8 -29.2L-21.2 -29.2Z" transform="translate(541 88)"></path>
+        <path d="M0 -103.8L23.3 -32.1L98.7 -32.1L37.7 12.3L61 84L0 39.7L-61 84L-37.7 12.3L-98.7 -32.1L-23.3 -32.1Z" transform="translate(633 714)"></path>
+        <path d="M0 -72.7L16.3 -22.5L69.1 -22.5L26.4 8.6L42.7 58.8L0 27.8L-42.7 58.8L-26.4 8.6L-69.1 -22.5L-16.3 -22.5Z" transform="translate(314 398)"></path>
+        <path d="M0 -45.3L10.2 -14L43.1 -14L16.5 5.3L26.6 36.7L0 17.3L-26.6 36.7L-16.5 5.3L-43.1 -14L-10.2 -14Z" transform="translate(80 663)"></path>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Contenedor principal con contenido -->
+  <div class="relative z-10 bg-white bg-opacity-90 p-8 rounded-xl shadow-xl w-full max-w-2xl">
+    <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">Gestión de Datos (Excel)</h2>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 mb-2">Cargar archivo Excel (datos_YYYY-MM-DD.xlsx):</label>
+      <input type="file" id="input-excel" class="mb-4" />
+    </div>
+
+    <div class="mb-4">
+      <input type="text" id="nombre" placeholder="Nombre" class="w-full mb-2 p-2 rounded border border-gray-300" />
+      <input type="number" id="edad" placeholder="Edad" class="w-full p-2 rounded border border-gray-300" />
+    </div>
+
+    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-4">Guardar</button>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white text-center">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2">ID</th>
+            <th class="px-4 py-2">Nombre</th>
+            <th class="px-4 py-2">Edad</th>
+            <th class="px-4 py-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-datos">
+          <!-- Aquí se agregarán dinámicamente los datos -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  let contadorID = 1; // Para asignar un ID único a cada registro
+
+  // Botón de guardar
+  const botonGuardar = document.querySelector("button");
+  const tabla = document.getElementById("tabla-datos");
+
+  botonGuardar.addEventListener("click", () => {
+    const nombre = document.getElementById("nombre").value.trim();
+    const edad = document.getElementById("edad").value.trim();
+
+    // Validación simple
+    if (nombre === "" || edad === "") {
+      alert("Por favor ingresa un nombre y una edad.");
+      return;
+    }
+
+    // Crear fila
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td class="px-4 py-2">${contadorID++}</td>
+      <td class="px-4 py-2">${nombre}</td>
+      <td class="px-4 py-2">${edad}</td>
+      <td class="px-4 py-2">
+        <button class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" onclick="eliminarFila(this)">Eliminar</button>
+      </td>
+    `;
+
+    tabla.appendChild(fila);
+
+    // Limpiar inputs
+    document.getElementById("nombre").value = "";
+    document.getElementById("edad").value = "";
+  });
+
+  // Eliminar fila
+  function eliminarFila(boton) {
+    boton.closest("tr").remove();
+  }
+</script>
+
+</body>
+</html>
